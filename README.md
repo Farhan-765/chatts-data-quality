@@ -203,8 +203,8 @@ from spike detection because their peaks exceed the 4σ threshold but are not an
 | Variable             | Required | Description |
 |----------------------|----------|-------------|
 | `TIMESEER_API_TOKEN` | Yes      | Base64-encoded API token |
-| `TIMESEER_BASE_URL`  | No       | Default: `https://app.timeseer.ai` |
-| `TIMESEER_TENANT`    | No       | Default: `UHasselt` |
+| `TIMESEER_BASE_URL`  | Yes      | Your Timeseer instance URL |
+| `TIMESEER_TENANT`    | Yes      | Your Timeseer tenant name |
 | `OPENAI_API_KEY`     | For GPT-4o comparisons | OpenAI API key |
 | `VSC_SCRATCH`        | On VSC   | Scratch directory path |
 
