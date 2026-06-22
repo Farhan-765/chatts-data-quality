@@ -1,0 +1,81 @@
+# Statistical pre-screener thresholds.
+# These values were tuned on the 55-signal industrial dataset
+# and locked in as the final configuration for Approach 3.
+
+# ── Frozen / Stale detection ──────────────────────────────────────
+frozen:
+  rolling_window: 10        # 10-point rolling std window
+  std_threshold: 0.01       # min rolling std below this = frozen candidate
+  zero_diff_threshold: 10   # consecutive identical readings > this = true frozen (C)
+  # if min_roll_std < std_threshold AND zero_diffs > zero_diff_threshold → C) Frozen
+  # if min_roll_std < std_threshold AND zero_diffs <= zero_diff_threshold
+  #    AND near_zero_windows > var_collapse_min_windows → G) Variance Collapse
+  var_collapse_min_windows: 50
+
+# ── Drift detection ───────────────────────────────────────────────
+drift:
+  rolling_window: 96        # 96 points = 24 hours (one full daily cycle)
+  drift_ratio_threshold: 0.15   # rolling mean range / signal range > 0.15
+  seasonality_filter: 0.3  # roll_mean_std must be > 0.3 * global_std
+  # The seasonality filter prevents daily sinusoidal cycles from being
+  # classified as drift. Pure daily cycles have low roll_mean_std
+  # relative to global_std.
+
+# ── Spike detection ───────────────────────────────────────────────
+spikes:
+  local_window: 10          # rolling window for local mean/std
+  shift_lag: 5              # shift(5) uses pre-spike baseline (avoids self-contamination)
+  sigma_threshold: 4.0      # local deviation must exceed 4σ pre-spike std
+  max_run_length: 5         # spikes are 1-5 consecutive points (longer = phase change)
+  amplitude_threshold: 0.20 # spike amplitude must be > 20% of signal range
+  periodicity:
+    enabled: true
+    min_spikes: 10          # only check periodicity if >= 10 spike runs
+    gap_cv_threshold: 0.5   # coefficient of variation of inter-spike gaps
+    gap_min: 48             # min gap in points (12 hours)
+    gap_max: 200            # max gap in points (50 hours)
+    # if periodic → NOT classified as B) Spikes (it is expected process behavior)
+
+# ── Intermittent failure detection ───────────────────────────────
+intermittent:
+  min_negative_count: 2     # at least 2 negative values required
+  max_negative_ratio: 0.05  # < 5% of signal can be negative (otherwise valid range)
+  # Physical rule: TOC, turbidity, dissolved oxygen, ammonia cannot be negative.
+  # Tags where negatives ARE physically valid (e.g., temperature, dew point):
+  # these are excluded from intermittent detection via SKIP_SPIKE_TAGS
+
+# ── Tags excluded from spike detection ───────────────────────────
+# These signals have large daily cycles that exceed 3-4σ but are NOT anomalies.
+skip_spike_tags:
+  - ORP
+  - PRESS
+  - TEMP
+  - TEMP-TOP
+  - TEMP-BTM
+  - DENS
+  - DENS-OH
+  - DENS-BTM
+  - DENS-2
+  - VISC
+  - VISC-2
+  - GC-C1
+  - REFR
+  - COLOR
+  - MOIST
+  - MOIST-2
+  - LEVEL
+  - COND-CW
+  - TURB-CW
+  - DEW
+  - DEW-IA
+  - PH-CW
+  - PH-2
+  - UTL-AT-603-O2
+  - NH3-IA
+  - PH
+  - PKG-AT-706-COND
+  - SEP-AT-303-COND
+  - WT-AT-506-COND
+  - WT-AT-504-TSS
+  - WT-AT-503-DO
+  - WT-AT-502-COD

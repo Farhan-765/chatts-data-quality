@@ -1,0 +1,68 @@
+# MLP segmentation pipeline configuration.
+# Locked in after threshold sweep analysis (notebook cell 109).
+
+model:
+  ts_dim: 512       # Chronos-T5-small embedding dimension
+  text_dim: 5120    # ChatTS-14B hidden dimension (embed_tokens output)
+  hidden_dim: 128
+  dropout: 0.3
+
+training:
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  batch_size: 64
+  train_split: 0.8
+  # pos_weight is computed from actual class balance:
+  # industrial-only: (1 - 0.0829) / 0.0829 = 10.07
+  # combined:        (1 - 0.2288) / 0.2288 = 3.37
+  pos_weight_combined: 3.37
+
+inference:
+  threshold: 0.65       # tuned from threshold sweep: F1=0.699 at 0.65
+  window_size: 128      # primary window size for segmentation
+  stride_ratio: 0.5     # 50% overlap between windows
+  downsample_to: 1024   # downsample full signal before windowing
+
+multiscale:
+  window_sizes: [32, 64, 128, 256]
+  aggregation: max      # max probability across scales at each timestep
+
+final_model:
+  # Results locked in cell 111 of the original notebook
+  val_loss: 0.5372
+  accuracy: 0.880
+  precision: 0.752
+  recall: 0.653
+  f1: 0.699
+  epochs_trained: 150
+  training_data: combined industrial + synthetic
+
+data:
+  # Industrial training data — 14 labelled signals
+  industrial_signals:
+    - [R1-AT-102-COND,  Reactor 1,            spikes,       1460, 1475]
+    - [R1-AT-101-PH,    Reactor 1,            drift,        0,    8640]
+    - [R1-AT-103-DO,    Reactor 1,            stale,        2131, 2259]
+    - [R2-AT-202-TOC,   Reactor 2,            spikes,       2860, 2880]
+    - [R2-AT-201-NH3,   Reactor 2,            spikes,       1465, 1480]
+    - [SEP-AT-301-PH,   Separator,            drift,        0,    8640]
+    - [SEP-AT-302-TURB, Separator,            spikes,       8290, 8310]
+    - [DIST-AT-407-REFR,Distillation,         var_collapse, 5345, 5473]
+    - [WT-AT-501-PH,    Wastewater Treatment, stale,        2909, 3037]
+    - [WT-AT-502-COD,   Wastewater Treatment, drift,        0,    8640]
+    - [WT-AT-505-TURB,  Wastewater Treatment, spikes,       3878, 3890]
+    - [UTL-AT-601-CL2,  Utilities,            stale,        7511, 7639]
+    - [UTL-AT-602-CO2,  Utilities,            spikes,       1250, 1265]
+    - [UTL-AT-605-COND, Utilities,            spikes,       6283, 6295]
+
+  queries:
+    - Find all periods with oscillations
+    - Detect stale data
+    - Identify temperature spikes
+    - Find sudden increases
+    - Detect long periods of constant values
+    - Find periods with indications of valve stiction
+    - Find IQR anomalies
+    - Find sudden drops
+    - Find all periods where the signal rises quickly then stabilizes
+    - Find periods with abnormal dynamics

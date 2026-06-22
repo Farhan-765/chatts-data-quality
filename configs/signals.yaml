@@ -1,0 +1,105 @@
+# All 55 industrial sensor tags with ground truth labels.
+# Dataset: Nov 14 2025 – Feb 12 2026 (~90 days, 8640 points at 15-min sampling).
+# Source: Timeseer industrial plant (UHasselt research site).
+#
+# Anomaly taxonomy:
+#   A = Drift          (slow baseline migration over weeks)
+#   B = Spikes         (sudden transient outliers)
+#   C = Frozen         (stale / flatline)
+#   D = Phase Change   (abrupt permanent level shift)
+#   E = None/Clean     (no anomaly)
+#   G = Var Collapse   (intermittent amplitude collapse)
+#   L = Intermittent   (physically impossible values)
+#   B+L = Composite    (spikes + intermittent)
+
+timeseer:
+  base_url: https://app.timeseer.ai
+  tenant: UHasselt
+  dataset_name: Industrial analyzers
+  from: "2025-11-14T00:00:00Z"
+  to:   "2026-02-12T00:00:00Z"
+  sampling_minutes: 15
+
+areas:
+  Reactor 1:
+    view: Analyzers - area Reactor 1
+    tags:
+      R1-AT-101-PH:    A    # pH drift: baseline rises ~1.0 pH over 103 days
+      R1-AT-102-COND:  B    # Conductivity: 12 spikes, max ~100 uS/cm above nominal
+      R1-AT-103-DO:    C    # Dissolved oxygen: 2 stale events (780 min, 165 min)
+      R1-AT-104-TEMP:  E    # Temperature: clean daily cycle, no anomalies
+      R1-AT-105-PRESS: E    # Pressure: clean with strong daily cycle
+      R1-AT-106-ORP:   E    # ORP: periodic oscillation, not anomalous
+
+  Reactor 2:
+    view: Analyzers - area Reactor 2
+    tags:
+      R2-AT-201-NH3:   B    # Ammonia: 2 isolated spikes at 4-sigma
+      R2-AT-202-TOC:   B+L  # TOC: spikes + 3 physically impossible negative values
+      R2-AT-203-PH:    E    # pH: clean with strong daily cycle
+      R2-AT-204-TEMP:  E    # Temperature: clean daily cycle
+      R2-AT-205-VISC:  E    # Viscosity: stable
+      R2-AT-206-DENS:  E    # Density: strong 7-day cycle, very stable
+
+  Separator:
+    view: Analyzers - area Separator
+    tags:
+      SEP-AT-301-PH:   A    # pH: drift
+      SEP-AT-302-TURB: B    # Turbidity: spikes + physically impossible negatives
+      SEP-AT-303-COND: E    # Conductivity: clean
+      SEP-AT-304-TEMP: E    # Temperature: clean
+      SEP-AT-305-LEVEL: E   # Level: clean
+      SEP-AT-306-DENS: E    # Density: clean
+
+  Distillation:
+    view: Analyzers - area Distillation
+    tags:
+      DIST-AT-401-TEMP-TOP: E   # Top temperature: clean daily cycle
+      DIST-AT-402-TEMP-BTM: E   # Bottom temperature: clean daily cycle (M1-M3 change = 0.28 C)
+      DIST-AT-403-PRESS:    E   # Pressure: clean
+      DIST-AT-404-DENS-OH:  E   # Overhead density: clean
+      DIST-AT-405-DENS-BTM: E   # Bottom density: clean
+      DIST-AT-406-VISC:     E   # Viscosity: clean
+      DIST-AT-407-REFR:     G   # Refractive index: variance collapse (1651 near-zero windows)
+      DIST-AT-408-GC-C1:    E   # GC composition: clean
+
+  Wastewater Treatment:
+    view: Analyzers - area Wastewater Treatment
+    tags:
+      WT-AT-501-PH:   C    # pH: stale data (2909-3037)
+      WT-AT-502-COD:  A    # COD: drift
+      WT-AT-503-DO:   E    # Dissolved oxygen: borderline (2.97-sigma daily cycle)
+      WT-AT-504-TSS:  E    # Total suspended solids: borderline within natural range
+      WT-AT-505-TURB: B    # Turbidity: spikes
+      WT-AT-506-COND: E    # Conductivity: wide daily cycle
+      WT-AT-507-NH3:  E    # Ammonia: clean
+      WT-AT-508-TOC:  E    # TOC: clean
+
+  Utilities:
+    view: Analyzers - area Utilities
+    tags:
+      UTL-AT-601-CL2:   C    # Chlorine: stale (7511-7639)
+      UTL-AT-602-CO2:   B    # CO2: spikes
+      UTL-AT-603-O2:    E    # Oxygen: clean
+      UTL-AT-604-TEMP:  E    # Temperature: clean
+      UTL-AT-605-COND:  B    # Conductivity: spikes
+      UTL-AT-606-PH:    E    # pH: clean
+      UTL-AT-607-TURB:  E    # Turbidity: clean
+      UTL-AT-608-FLOW:  E    # Flow: clean
+      UTL-AT-609-PRESS: E    # Pressure: clean
+      UTL-AT-610-LEVEL: E    # Level: clean
+
+  Packaging:
+    view: Analyzers - area Packaging
+    tags:
+      PKG-AT-701-VISC:  E    # Viscosity: clean
+      PKG-AT-702-TEMP:  E    # Temperature: clean
+      PKG-AT-703-VISC:  E    # Viscosity 2: clean
+      PKG-AT-704-TEMP:  E    # Temperature 2: clean
+      PKG-AT-705-PH:    E    # pH: clean
+      PKG-AT-706-COND:  E    # Conductivity: wide daily cycle (not spikes)
+      PKG-AT-707-TURB:  E    # Turbidity: clean
+      PKG-AT-708-MOIST: E    # Moisture: clean
+      PKG-AT-709-COLOR: E    # Color: clean
+      PKG-AT-710-DENS:  E    # Density: clean
+      PKG-AT-711-LEVEL: E    # Level: clean

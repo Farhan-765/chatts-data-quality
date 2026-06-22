@@ -1,0 +1,38 @@
+# VSC (Flemish Supercomputer Center) execution paths.
+# Override values via .env: VSC_SCRATCH=/your/path
+
+scratch_dir: /scratch/leuven/375/vsc37531
+
+# Model checkpoints — stored in scratch
+chatts_ckpt_dir: ${scratch_dir}/ChatTS/ckpt
+chatts_8b_name:  ChatTS-8B
+chatts_14b_name: ChatTS-14B
+
+# Chronos checkpoint (used by segmentation pipeline)
+chronos_ckpt: ${scratch_dir}/ChatTS/ckpt/chronos-t5-small
+
+# Python binary for the Chronos subprocess (separate conda env)
+chronos_python: ${scratch_dir}/chatTS_new_env/bin/python3.11
+
+# HuggingFace cache
+hf_home:           ${scratch_dir}/cache/huggingface
+hf_modules_cache:  ${scratch_dir}/cache/hf_modules
+transformers_cache: ${scratch_dir}/cache/transformers
+
+# Data directories
+data_dir:    ${scratch_dir}/ChatTS/timeseer_data
+figures_dir: ${scratch_dir}/ChatTS/figures
+reactor1_csv_dir: ${scratch_dir}/ChatTS/timeseer_data/reactor1
+
+# Output paths for saved models
+mlp_v1_path:    ${scratch_dir}/ChatTS/timeseer_data/segmentation_mlp_v1.pt
+mlp_v2_path:    ${scratch_dir}/ChatTS/timeseer_data/segmentation_mlp_v2.pt
+mlp_final_path: ${scratch_dir}/ChatTS/timeseer_data/segmentation_mlp_final.pt
+
+# Chronos embedding cache
+chronos_cache_path: ${scratch_dir}/ChatTS/timeseer_data/chronos_cache.pkl
+
+# GPU settings
+cuda_device: 0
+max_vram_gpu: "75GiB"
+max_ram_cpu:  "60GiB"

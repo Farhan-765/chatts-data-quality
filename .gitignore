@@ -1,0 +1,58 @@
+# Secrets — NEVER commit
+.env
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data — industrial signals are private
+data/reactor1_csv/*.csv
+data/raw/
+
+# Large model checkpoints — download separately
+models/*.bin
+models/*.safetensors
+models/ChatTS-8B/
+models/ChatTS-14B/
+models/chronos-t5-small/
+
+# Saved tensors (industrial embeddings — may contain derivative data)
+data/X_ts_industrial.pt
+data/X_txt_industrial.pt
+data/y_industrial.pt
+
+# Chronos cache
+data/chronos_cache.pkl
+
+# Generated figures (reproducible from code)
+figures/*.png
+figures/*.pdf
+
+# VSC scratch paths
+/scratch/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temp files
+/tmp/chronos_embed.py
+/tmp/chronos_server.py
+/tmp/gpt4o_payload.json

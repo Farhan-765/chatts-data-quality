@@ -1,0 +1,41 @@
+name: chatts
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.11
+  - pip
+
+  # PyTorch — CUDA 12.1 for A100
+  - pytorch::pytorch=2.2.0
+  - pytorch::torchvision
+  - pytorch::pytorch-cuda=12.1
+
+  - numpy>=1.26
+  - pandas>=2.1
+  - scipy>=1.11
+  - scikit-learn>=1.3
+  - matplotlib>=3.8
+  - seaborn>=0.13
+
+  - jupyter
+  - ipywidgets>=8.1
+  - tqdm
+  - pyyaml>=6.0
+  - python-dotenv>=1.0
+
+  - pip:
+    # ChatTS requires trust_remote_code — install from HuggingFace
+    - transformers>=4.40.0
+    - accelerate>=0.27.0
+    - openai>=1.10.0
+    - requests>=2.31.0
+    - sentencepiece
+    - tokenizers
+
+# NOTE: Do NOT install chronos-forecasting in this environment.
+# chronos conflicts with this accelerate version.
+# Use environment_chronos.yml for the Chronos subprocess.

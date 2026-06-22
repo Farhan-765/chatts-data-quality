@@ -1,0 +1,26 @@
+name: chatts_chronos
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.11
+  - pip
+
+  # Minimal deps — only what Chronos needs
+  - numpy>=1.24
+  - pip:
+    - chronos-forecasting>=1.3.0
+    - torch>=2.1.0
+    - transformers>=4.38.0
+    # NOTE: do NOT install accelerate here — conflicts with main env
+
+# This environment is used ONLY for the Chronos subprocess server.
+# The main chatts environment calls:
+#   python3.11 /tmp/chronos_server.py
+# using this environment's Python binary.
+#
+# To install:
+#   conda env create -f environment_chronos.yml
+#   conda activate chatts_chronos
+#   pip install chronos-forecasting
