@@ -216,7 +216,7 @@ If you use this codebase or the thesis results, please cite:
 
 ```
 [MSc Thesis] ChatTS for Industrial Sensor Anomaly Detection
-Author: [Your Name]
+Author: Muhammad Farhan
 Institution: UHasselt / KU Leuven
 Year: 2026
 ```
