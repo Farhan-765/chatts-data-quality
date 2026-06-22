@@ -215,7 +215,7 @@ from spike detection because their peaks exceed the 4σ threshold but are not an
 If you use this codebase or the thesis results, please cite:
 
 ```
-[MSc Thesis] ChatTS for Industrial Sensor Anomaly Detection
+[MSc Thesis] Multimodal modeling for industrial IoT sensor data and language
 Author: Muhammad Farhan
 Institution: UHasselt / KU Leuven
 Year: 2026
