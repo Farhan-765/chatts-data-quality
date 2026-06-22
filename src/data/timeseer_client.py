@@ -10,8 +10,8 @@ import json
 import numpy as np
 import pandas as pd
 
-BASE_URL  = os.environ.get('TIMESEER_BASE_URL', 'https://app.timeseer.ai')
-TENANT    = os.environ.get('TIMESEER_TENANT', 'UHasselt')
+BASE_URL  = os.environ.get('TIMESEER_BASE_URL', '')
+TENANT    = os.environ.get('TIMESEER_TENANT', '')
 API_TOKEN = os.environ.get('TIMESEER_API_TOKEN', '')
 DS_NAME   = 'Industrial analyzers'
 
